@@ -28,11 +28,11 @@ class MenuController extends Controller
                 $menu['/shop'] = 'Shop';
                 $menu['/about'] = 'About';
                 $menu['/contact'] = 'Contact';
-                $menu['/admin/newcategory'] = 'New Category';
+                $menu['/admin/categories/create'] = 'New Category';
                 $menu['/admin/categories'] = 'Categories';
-                $menu['/admin/newproduct'] = 'New Product';
+                $menu['/admin/products/create'] = 'New Product';
                 $menu['/admin/products'] = 'Products';
-                $menu['/admin/newpost'] = 'New Post';
+                $menu['/admin//posts/create'] = 'New Post';
                 $menu['/admin/posts'] = 'Posts';
             }
 

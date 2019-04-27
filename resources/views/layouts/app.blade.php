@@ -84,6 +84,7 @@
                 </div>
                 <div class="col-8">
                     <main class="py-4">
+                        @include('components.messages')
                         @yield('content')
                     </main>
                 </div>
