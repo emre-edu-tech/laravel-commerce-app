@@ -19,4 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('/admin/categories', 'CategoriesController');
+Route::post('/admin/categories/search', 'CategoriesController@search');
+
+Route::resource('/admin/categories', 'CategoriesController')->middleware('checkrole');

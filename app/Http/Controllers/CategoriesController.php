@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Image;
+use \Auth;
 
 class CategoriesController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +19,9 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view('categories.index');
+        $categories = Category::with('children')->get();
+
+        return view('categories.index')->with('categories', $categories);
     }
 
     /**
@@ -51,7 +56,7 @@ class CategoriesController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'parentCategory' => 'required|integer',
-            'featuredLogo' => 'required'
+            'featuredLogo' => 'required|image'
         ],
         // custom validation messages
         [
@@ -67,17 +72,30 @@ class CategoriesController extends Controller
         $category->description = $request->input('description');
         $category->slug = str_slug($category->name, $separator = '-');
         $image_file = $request->file('featuredLogo');
+
         if($image_file){
+
             // set a file name to upload to the folder
-            $filename = uniqid() . '-' . $category->name . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . $category->slug . '.' . File::extension($image_file->getClientOriginalName());
+
+            Storage::disk('public')->put('original/'.$filename, File::get($image_file));
             $category->featured_logo = $filename;
-            Storage::disk('public')->put($filename, File::get($image_file));
+
+            $img = Image::make(storage_path('app/public/original/').$filename)->resize(200, null, function($constraint){
+                $constraint->aspectRatio();
+            });
+
+            $img->save(storage_path('app/public/').'resized-'.$filename);
+
+            $category->thumb_featured_logo = 'resized-'.$filename;
+            
+            // save category to the database
             $category->save();
         }else{
             return redirect('/admin/categories/create')->with('error', 'Geçerli bir resim dosyası bulunamadı');
         }
 
-        return redirect('/admin/categories')->with('success', 'Yeni kategori eklendi');
+        return redirect('/admin/categories')->with('success', 'Yeni bir kategori eklendi');
     }
 
     /**
@@ -88,7 +106,11 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        //
+        $categories = Category::with('children')->get();
+
+        $category = $categories->find($id);
+
+        return view('categories.show')->with('category', $category);
     }
 
     /**
@@ -99,7 +121,23 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+
+        // get the main categories
+        $parentCategories = Category::all()->where('parent_id', 0);
+        $parentCategoryOptions = array();
+        if(count($parentCategories) > 0){
+            foreach ($parentCategories as $parentCategory) {
+                $parentCategoryOptions[$parentCategory->id] = $parentCategory->name;
+            }
+        }
+
+        $data = [
+            'category' => $category,
+            'parentCategoryOptions' => $parentCategoryOptions,
+        ];
+
+        return view('categories.edit')->with($data);
     }
 
     /**
@@ -111,7 +149,49 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // validate the data
+        $this->validate($request, [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'parentCategory' => 'required',
+            'featuredLogo' => 'sometimes|image'
+        ],
+        // custom validation messages
+        [
+            'name.required' => 'Kategori Adı giriniz',
+            'description.required' => 'Kategori Açıklaması girilmesi gerekli',
+            'parentCategory.required' => 'Ana kategori seçiniz',
+            'featuredLogo.sometimes' => 'Logonuzu değiştirmek için resim seçin',
+        ]);
+
+        $category = Category::find($id);
+        $category->parent_id = $request->input('parentCategory');
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->slug = str_slug($category->name, $separator = '-');
+        $image_file = $request->file('featuredLogo');
+
+        if($image_file){
+
+            // set a file name to upload to the folder
+            $filename = time() . '-' . $category->slug . '.' . File::extension($image_file->getClientOriginalName());
+
+            Storage::disk('public')->put('original/'.$filename, File::get($image_file));
+            $category->featured_logo = $filename;
+
+            $img = Image::make(storage_path('app/public/original/').$filename)->resize(200, null, function($constraint){
+                $constraint->aspectRatio();
+            });
+
+            $img->save(storage_path('app/public/').'resized-'.$filename);
+
+            $category->thumb_featured_logo = 'resized-'.$filename;
+            
+        }
+
+        $category->update();
+
+        return redirect('/admin/categories')->with('success', 'Kategori başarıyla güncellendi');
     }
 
     /**
@@ -122,6 +202,27 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+
+        $category->delete();
+
+        return redirect('/admin/categories')->with('success', 'Kategori başarıyla silindi');
+    }
+
+    public function search(Request $request){
+        
+        $searchTerm = $request->input('searchTerm');
+
+        if(!empty($searchTerm)){
+            $categories = Category::with('children')->where('name', 'LIKE', '%'.$searchTerm.'%')
+                                                    ->orWhere('description', 'LIKE', '%'.$searchTerm.'%')
+                                                    ->orWhere('parent_id', '!=', 0)
+                                                    ->get();
+            // dd($categories);
+        }else{
+            $categories = Category::with('children')->get();
+        }
+
+        return view('categories.index')->with('categories', $categories);
     }
 }

@@ -17,32 +17,33 @@ class MenuController extends Controller
 
     	// no authenticated or customer user exists show normal frontend
     	if (is_null($user)) {
-    	   $menu['/'] = 'Homepage';
-           $menu['/shop'] = 'Shop';
-           $menu['/about'] = 'About';
-           $menu['/contact'] = 'Contact';
+    	   $menu['/'] = 'Anasayfa';
+           $menu['/shop'] = 'Ürünler';
+           $menu['/about'] = 'Hakkımızda';
+           $menu['/contact'] = 'İletişim';
     	}else{
             if ($user->hasRole('Administator')) {
-                $menu['/home'] = 'Dashboard';
-                $menu['/'] = 'Homepage';
-                $menu['/shop'] = 'Shop';
-                $menu['/about'] = 'About';
-                $menu['/contact'] = 'Contact';
-                $menu['/admin/categories/create'] = 'New Category';
-                $menu['/admin/categories'] = 'Categories';
-                $menu['/admin/products/create'] = 'New Product';
-                $menu['/admin/products'] = 'Products';
-                $menu['/admin//posts/create'] = 'New Post';
-                $menu['/admin/posts'] = 'Posts';
+                $menu['/'] = 'Anasayfa';
+                $menu['/shop'] = 'Ürünler';
+                $menu['/about'] = 'Hakkımızda';
+                $menu['/contact'] = 'İletişim';
+                $menu['/admin/home'] = 'Yönetim Paneli';
+                $menu['/admin/categories/create'] = 'Yeni Kategori';
+                $menu['/admin/categories'] = 'Kategoriler';
+                $menu['/admin/products/create'] = 'Yeni Ürünler';
+                $menu['/admin/products'] = 'Ürünleri Yönet';
+                $menu['/admin//posts/create'] = 'Yeni Yazı';
+                $menu['/admin/posts'] = 'Blog Yönet';
             }
 
             if($user->hasRole('Customer')){
-                $menu['/home'] = 'Dashboard';
-                $menu['/'] = 'Homepage';
-                $menu['/shop'] = 'Shop';
-                $menu['/about'] = 'About';
-                $menu['/contact'] = 'Contact';
-                $menu['/orders'] = 'Orders';
+                
+                $menu['/'] = 'Anasayfa';
+                $menu['/shop'] = 'Ürünler';
+                $menu['/about'] = 'Hakkımızda';
+                $menu['/contact'] = 'İletişim';
+                $menu['/user/home'] = 'Müşteri Paneli';
+                $menu['/orders'] = 'Siparişler';
             }
         }
 
