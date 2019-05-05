@@ -19,7 +19,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('children')->get();
+        $categories = Category::with('children')->orderBy('id', 'desc')->get();
 
         return view('categories.index')->with('categories', $categories);
     }
@@ -64,28 +64,29 @@ class CategoriesController extends Controller
             'description.required' => 'Kategori Açıklaması girilmesi gerekli',
             'parentCategory.required' => 'Ana kategori seçiniz',
             'featuredLogo.required' => 'Kategori için bir logo seçiniz',
+            'featuredLogo.image' => 'Kategori logosu olarak resim dosyası seçiniz',
         ]);
 
         $category = new Category();
         $category->parent_id = $request->input('parentCategory');
         $category->name = $request->input('name');
         $category->description = $request->input('description');
-        $category->slug = str_slug($category->name, $separator = '-');
+        $category->slug = str_slug($category->name, $separator = '-') . '-' . time();
         $image_file = $request->file('featuredLogo');
 
         if($image_file){
 
             // set a file name to upload to the folder
-            $filename = time() . '-' . $category->slug . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . str_slug($category->name, $separator = '-') . '.' . File::extension($image_file->getClientOriginalName());
 
-            Storage::disk('public')->put('original/'.$filename, File::get($image_file));
+            Storage::disk('public')->put('categories/original/'.$filename, File::get($image_file));
             $category->featured_logo = $filename;
 
-            $img = Image::make(storage_path('app/public/original/').$filename)->resize(200, null, function($constraint){
+            $img = Image::make(storage_path('app/public/categories/original/').$filename)->resize(200, null, function($constraint){
                 $constraint->aspectRatio();
             });
 
-            $img->save(storage_path('app/public/').'resized-'.$filename);
+            $img->save(storage_path('app/public/categories').'resized-'.$filename);
 
             $category->thumb_featured_logo = 'resized-'.$filename;
             
@@ -162,6 +163,7 @@ class CategoriesController extends Controller
             'description.required' => 'Kategori Açıklaması girilmesi gerekli',
             'parentCategory.required' => 'Ana kategori seçiniz',
             'featuredLogo.sometimes' => 'Logonuzu değiştirmek için resim seçin',
+            'featuredLogo.image' => 'Seçilen dosya bir resim dosyası olmalıdır',
         ]);
 
         $category = Category::find($id);
@@ -210,17 +212,23 @@ class CategoriesController extends Controller
     }
 
     public function search(Request $request){
-        
+
+        // validation has been done using only empty function
         $searchTerm = $request->input('searchTerm');
 
         if(!empty($searchTerm)){
-            $categories = Category::with('children')->where('name', 'LIKE', '%'.$searchTerm.'%')
-                                                    ->orWhere('description', 'LIKE', '%'.$searchTerm.'%')
-                                                    ->orWhere('parent_id', '!=', 0)
-                                                    ->get();
+            $categories = Category::with('children')
+                          ->whereHas('parent', function($query) use($searchTerm){
+                            $query->where('name', 'LIKE', '%'.$searchTerm.'%')
+                                  ->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+                          })
+                          ->orWhere('name', 'LIKE', '%'.$searchTerm.'%')
+                          ->orWhere('description', 'LIKE', '%'.$searchTerm.'%')
+                          ->orderBy('id', 'desc')
+                          ->get();
             // dd($categories);
         }else{
-            $categories = Category::with('children')->get();
+            $categories = Category::with('children')->orderBy('id', 'desc')->get();
         }
 
         return view('categories.index')->with('categories', $categories);

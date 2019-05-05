@@ -30,7 +30,7 @@ class MenuController extends Controller
                 $menu['/admin/home'] = 'Yönetim Paneli';
                 $menu['/admin/categories/create'] = 'Yeni Kategori';
                 $menu['/admin/categories'] = 'Kategoriler';
-                $menu['/admin/products/create'] = 'Yeni Ürünler';
+                $menu['/admin/products/create'] = 'Yeni Ürün';
                 $menu['/admin/products'] = 'Ürünleri Yönet';
                 $menu['/admin//posts/create'] = 'Yeni Yazı';
                 $menu['/admin/posts'] = 'Blog Yönet';

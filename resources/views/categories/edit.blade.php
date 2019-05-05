@@ -23,7 +23,7 @@
 		</select>
 	</div>
 	<div class="form-group">
-		Şimdiki Logo: <a href="{{ url('storage/original/'.$category->featured_logo) }}" target="_blank"><img src="{{ url('storage/'.$category->thumb_featured_logo) }}"></a>
+		Şimdiki Logo: <a href="{{ url('storage/categories/original/'.$category->featured_logo) }}" target="_blank"><img src="{{ url('storage/categories/'.$category->thumb_featured_logo) }}"></a>
 		<br>
 		{{Form::label('featuredLogo', 'Tanıtıcı Resim (logo) Güncelle')}}
 		{!! Form::file('featuredLogo', ['class' => 'form-control']) !!}

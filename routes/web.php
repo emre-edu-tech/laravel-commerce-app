@@ -19,6 +19,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/admin/categories/search', 'CategoriesController@search');
+Route::post('/admin/categories/search', 'CategoriesController@search')->middleware('checkrole');
 
 Route::resource('/admin/categories', 'CategoriesController')->middleware('checkrole');
+
+Route::post('/admin/products/search', 'ProductsController@search')->middleware('checkrole');
+
+Route::resource('/admin/products', 'ProductsController')->middleware('checkrole');
+
+Route::resource('/admin/boxtype', 'BoxTypesController')->middleware('checkrole');
+
+Route::resource('/admin/packagetype', 'PackageTypesController')->middleware('checkrole');

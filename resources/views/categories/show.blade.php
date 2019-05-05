@@ -17,7 +17,7 @@
 			<div class="card-info"><strong>Kategori Açıklama:</strong> {{ $category->description }}</div>
 			<div class="card-img">
 				<strong>Logo:</strong>
-				<a href="{{ url('storage/original/'.$category->featured_logo) }}" target="_blank"><img src="{{ url('storage/'.$category->thumb_featured_logo) }}"></a>
+				<a href="{{ url('storage/categories/original/'.$category->featured_logo) }}" target="_blank"><img src="{{ url('storage/categories/'.$category->thumb_featured_logo) }}"></a>
 			</div>
 			<div class="card-footer">
 				<a href="/admin/categories/{{$category->id}}/edit" class="btn btn-primary">Kategori Güncelle</a>
