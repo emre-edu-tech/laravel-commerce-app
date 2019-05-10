@@ -86,7 +86,7 @@ class CategoriesController extends Controller
                 $constraint->aspectRatio();
             });
 
-            $img->save(storage_path('app/public/categories').'resized-'.$filename);
+            $img->save(storage_path('app/public/categories/').'resized-'.$filename);
 
             $category->thumb_featured_logo = 'resized-'.$filename;
             

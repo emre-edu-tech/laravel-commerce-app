@@ -14,7 +14,7 @@
 	<div class="form-group">
 		{{Form::label('parentCategory', 'Ana Kategori Seç')}}
 		<select name="parentCategory" id="parentCategory">
-			<option value="0">Ana Kategori</option>
+			<option value="0">Ana Kategori Yok</option>
 			@if(count($parentCategoryOptions) > 0)
 				@foreach($parentCategoryOptions as $parentCategoryId => $parentCategoryName)
 					<option value="{{ $parentCategoryId }}">{{ $parentCategoryName }}</option>
