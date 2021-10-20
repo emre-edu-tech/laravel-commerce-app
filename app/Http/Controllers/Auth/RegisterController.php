@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Role;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class RegisterController extends Controller
 {
@@ -76,7 +77,10 @@ class RegisterController extends Controller
         $user->password = Hash::make($data['password']);
 
         // find the role specified with the register form
-        $role = Role::find($data['role']);
+        // Customer is the default role for the one who uses register form
+        // 2 is the Customer role id in database
+        // Users with the admin role must be added by hand
+        $role = Role::findOrFail(2);
 
         $role->users()->save($user);
 
