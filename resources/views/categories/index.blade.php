@@ -2,14 +2,15 @@
 
 @section('content')
 	<h2>Ürün Kategorileri</h2>
-	{{ Form::open(['action' => 'CategoriesController@search', 'method' => 'POST']) }}
+	<form action="{{ route('categories.search') }}" method="post">
+		@csrf
 		<div class="form-group">
-			{{Form::text('searchTerm', '', ['class' => 'form-control', 'placeholder' => 'Arama yap']) }}
+			<input type="text" name="searchTerm" id="searchTerm" class="form-control" placeholder="Arama Yap">
 		</div>
 		<div class="form-group">
-			{{ Form::submit('Kategorilerde ara', ['class' => 'btn btn-primary']) }}
+			<input type="submit" value="Kategorilerde ara" class="btn btn-primary">
 		</div>
-	{{ Form::close() }}
+	</form>
 	@if(count($categories) > 0)
 		<table class="table">
 			<tr>

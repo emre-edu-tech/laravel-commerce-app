@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+use Image;
+use App\BoxType;
 use App\Product;
 use App\Category;
 use App\PackageType;
-use App\BoxType;
-use Image;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -90,11 +91,11 @@ class ProductsController extends Controller
         $product->base_unit_price = $request->input('baseUnitPrice');
         $product->sale_unit_price = $request->input('saleUnitPrice');
         $product->quantity_in_stock = $request->input('quantityInStock');
-        $product->slug = str_slug($product->name, $separator = '-') . '-' . time();
+        $product->slug = Str::slug($product->name, '-') . '-' . time();
         $image_file = $request->file('featuredImage');
         if($image_file){
             // set a file name to upload to a folder and also to the database as image file name - with its file extension
-            $filename = time() . '-' . str_slug($product->name, $separator = '-') . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . Str::slug($product->name, '-') . '.' . File::extension($image_file->getClientOriginalName());
 
             // upload the original picture to resize and use it later
             Storage::disk('public')->put('products/original/'.$filename, File::get($image_file));
@@ -204,11 +205,11 @@ class ProductsController extends Controller
         $product->base_unit_price = $request->input('baseUnitPrice');
         $product->sale_unit_price = $request->input('saleUnitPrice');
         $product->quantity_in_stock = $request->input('quantityInStock');
-        $product->slug = str_slug($product->name, $separator = '-') . '-' . time();
+        $product->slug = Str::slug($product->name, '-') . '-' . time();
         $image_file = $request->file('featuredImage');
         if($image_file){
             // set a file name to upload to a folder and also to the database as image file name - with its file extension
-            $filename = time() . '-' . str_slug($product->name, $separator = '-') . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . Str::slug($product->name, '-') . '.' . File::extension($image_file->getClientOriginalName());
 
             // upload the original picture to resize and use it later
             Storage::disk('public')->put('products/original/'.$filename, File::get($image_file));

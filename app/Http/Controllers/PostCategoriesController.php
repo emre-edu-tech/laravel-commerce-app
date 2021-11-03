@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\PostCategory;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 use Image;
+use App\PostCategory;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PostCategoriesController extends Controller
 {
@@ -63,13 +64,13 @@ class PostCategoriesController extends Controller
         $postCategory->parent_category_id = $request->input('parentCategory');
         $postCategory->name = $request->input('name');
         $postCategory->description = $request->input('description');
-        $postCategory->slug = str_slug($postCategory->name, $separator = '-') . '-' . time();
+        $postCategory->slug = Str::slug($postCategory->name, '-') . '-' . time();
         $image_file = $request->file('featuredImage');
 
         if($image_file){
 
             // set a file name to upload to the folder
-            $filename = time() . '-' . str_slug($postCategory->name, $separator = '-') . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . Str::slug($postCategory->name, '-') . '.' . File::extension($image_file->getClientOriginalName());
 
             Storage::disk('public')->put('postcategories/original/'.$filename, File::get($image_file));
             $postCategory->featured_image = $filename;
@@ -112,8 +113,9 @@ class PostCategoriesController extends Controller
      */
     public function edit($id)
     {
+        $postcategory = PostCategory::find($id);
         $parentCategories = PostCategory::with('children')->where('parent_category_id', 0)->orderBy('name', 'asc')->get();
-        return view('postCategories.edit')->with('postCategory', $postCategory);
+        return view('postCategories.edit')->with('postCategory', $postcategory);
     }
 
     /**

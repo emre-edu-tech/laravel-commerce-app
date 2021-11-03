@@ -20,7 +20,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
-Route::post('/admin/categories/search', 'CategoriesController@search')->middleware('checkrole');
+Route::post('/admin/categories/search', 'CategoriesController@search')->name('categories.search')->middleware('checkrole');
 
 Route::resource('/admin/categories', 'CategoriesController')->middleware('checkrole');
 
@@ -36,6 +36,6 @@ Route::post('/admin/posts/search', 'PostsController@search')->middleware('checkr
 
 Route::resource('/admin/posts', 'PostsController')->middleware('checkrole');
 
-Route::post('/admin/postcategories/search', 'PostCategoriesController@search')->middleware('checkrole');
+Route::post('/admin/postcategories/search', 'PostCategoriesController@search')->name('postcategories.search')->middleware('checkrole');
 
 Route::resource('/admin/postcategories', 'PostCategoriesController')->middleware('checkrole');

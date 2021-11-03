@@ -16,6 +16,7 @@
 <h1>İletişim Formu</h1>
 <div class="contactform">
 	<form action="">
+		@csrf
 		<div class="form-group">
 			<input type="text" name="name" class="form-control" placeholder="Adınız">
 		</div>

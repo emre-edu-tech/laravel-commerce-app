@@ -1,18 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<h2>Blog Kategorisi Güncelleyin</h2>
-{{ Form::open(['action' => 'PostCategoriesController@update', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+<h2>Blog Kategorisi Güncelleme</h2>
+<form action="{{ route('postcategories.update', $postcategory->id) }}" method="post" enctype="multipart/form-data">
+	@csrf
 	<div class="form-group">
-		{{Form::label('name', 'Kategori Adı')}}
-		{{Form::text('name', '', ['class' => 'form-control'])}}
+		<label for="name">Kategori Adı</label>
+		<input type="text" name="name" id="name" class="form-control" value="{{ $postcategory->name }}">
 	</div>
 	<div class="form-group">
-		{{Form::label('description', 'Kategori Açıklama')}}
-		{{Form::textArea('description', '', ['class' => 'form-control'])}}
+		<label for="description">Kategori Açıklama</label>
+		<textarea name="description" id="description" cols="30" rows="10" class="form-control">{{ $postcategory->description }}</textarea>
 	</div>
 	<div class="form-group">
-		{{Form::label('parentCategory', 'Ana Kategori Seç')}}
+		<label for="parentCategory">Ana Kategori Seç</label>
 		<select name="parentCategory" id="parentCategory">
 			<option value="0">Ana kategori yok</option>
 			@if(count($parentCategories) > 0)
@@ -27,10 +28,5 @@
 			@endif
 		</select>
 	</div>
-	<div class="form-group">
-		{{Form::label('featuredImage', 'Tanıtıcı Resim (logo)')}}
-		{!! Form::file('featuredImage', ['class' => 'form-control']) !!}
-	</div>
-	{{Form::submit('Kategori Ekle', ['class' => 'btn btn-primary'])}}
-{{ Form::close() }}
+</form>
 @endsection

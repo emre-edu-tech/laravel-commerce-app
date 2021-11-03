@@ -1,14 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <h2>Ürünlerimiz</h2>
-{{ Form::open(['action' => 'ProductsController@search', 'method' => 'POST']) }}
+<form action="{{ route('products.search') }}" method="post">
+	@csrf
 	<div class="form-group">
-		{{Form::text('searchTerm', '', ['class' => 'form-control', 'placeholder' => 'Arama yap']) }}
+		<input type="text" name="searchTerm" id="searchTerm" class="form-control" placeholder="Arama Yap">
 	</div>
 	<div class="form-group">
-		{{ Form::submit('Ürünlerde ara', ['class' => 'btn btn-primary']) }}
+		<input type="submit" value="Ürünlerde ara" class="btn btn-primary">
 	</div>
-{{ Form::close() }}
+</form>
 @if(count($products) > 0)
 	<table class="table">
 		<tr>
@@ -29,7 +30,7 @@
 			<td>{{ $product->category->parent->name }}</td>
 			<td>{{ $product->category->name }}</td>
 			<td><a href="/admin/products/{{$product->id}}/edit"><strong>{{$product->name}}</strong></a></td>
-			<td>{{ str_limit($product->description, $limit = 250, $end = '...') }}</td>
+			<td>{{ Str::limit($product->description, $limit = 250, $end = '...') }}</td>
 			<td>{{ $product->packagetype->name}}</td>
 			<td>{{ $product->net_weight }}</td>
 			<td>{{ $product->base_unit_price }}</td>

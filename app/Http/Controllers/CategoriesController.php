@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Category;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 use Image;
-use \Auth;
+use App\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriesController extends Controller
 {
@@ -71,13 +71,13 @@ class CategoriesController extends Controller
         $category->parent_id = $request->input('parentCategory');
         $category->name = $request->input('name');
         $category->description = $request->input('description');
-        $category->slug = str_slug($category->name, $separator = '-') . '-' . time();
+        $category->slug = Str::slug($category->name, '-') . '-' . time();
         $image_file = $request->file('featuredLogo');
 
         if($image_file){
 
             // set a file name to upload to the folder
-            $filename = time() . '-' . str_slug($category->name, $separator = '-') . '.' . File::extension($image_file->getClientOriginalName());
+            $filename = time() . '-' . Str::slug($category->name, '-') . '.' . File::extension($image_file->getClientOriginalName());
 
             Storage::disk('public')->put('categories/original/'.$filename, File::get($image_file));
             $category->featured_logo = $filename;
@@ -170,7 +170,7 @@ class CategoriesController extends Controller
         $category->parent_id = $request->input('parentCategory');
         $category->name = $request->input('name');
         $category->description = $request->input('description');
-        $category->slug = str_slug($category->name, $separator = '-');
+        $category->slug = Str::slug($category->name, '-');
         $image_file = $request->file('featuredLogo');
 
         if($image_file){

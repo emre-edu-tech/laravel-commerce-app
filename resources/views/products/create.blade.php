@@ -2,10 +2,10 @@
 
 @section('content')
 <h2>Ürün Ekleyin</h2>
-{{ Form::open(['action' => 'ProductsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
-
+<form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
+	@csrf
 	<div class="form-group">
-		{{Form::label('category', 'Kategori:')}}
+		<label for="category">Kategori:</label>
 		<select name="category" id="category">
 			<option>Marka/Kategori seçiniz</option>
 			@if(count($categories) >0 )
@@ -17,17 +17,17 @@
 	</div>
 
 	<div class="form-group">
-		{{Form::label('name', 'Ürün Adı:')}}
-		{{Form::text('name', '', ['class' => 'form-control'])}}
+		<label for="name">Ürün Adı:</label>
+		<input type="text" name="name" id="name" class="form-control">
 	</div>
 
 	<div class="form-group">
-		{{Form::label('description', 'Ürün Açıklama:')}}
-		{{Form::textArea('description', '', ['class' => 'form-control'])}}
+		<label for="description">Ürün Açıklama</label>
+		<textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
 	</div>
 
 	<div class="form-group">
-		{{Form::label('packageType', 'Ambalaj Tipi:')}}
+		<label for="packageType">Ambalaj Tipi</label>
 		<select name="packageType" id="packageType">
 			<option>Ambalaj Tipi Seçiniz</option>
 			@if(count($packageTypes) > 0)
@@ -39,7 +39,7 @@
 	</div>
 
 	<div class="form-group">
-		{{Form::label('boxType', 'Kutu/Koli Tipi:')}}
+		<label for="boxType">Kutu/Koli Tipi</label>
 		<select name="boxType" id="boxType">
 			<option value="0">Tek Ürün</option>
 			@if(count($boxTypes) > 0)
@@ -51,30 +51,30 @@
 	</div>
 
 	<div class="form-group">
-		{{Form::label('netWeight', 'Net Ağırlık')}}
-		{{Form::text('netWeight', '', ['class' => 'form-control', 'placeholder' => 'Ağırlık - kg/g - lt/ml'])}}
+		<label for="netWeight">Net Ağırlık</label>
+		<input type="text" name="netWeight" id="netWeight" placeholder="Ağırlık - kg/g - lt/ml" class="form-control">
 	</div>
 
 	<div class="form-group">
-		{{Form::label('baseUnitPrice', 'Birim Fiyat')}}
-		{{Form::text('baseUnitPrice', '', ['class' => 'form-control', 'placeholder' => '... TL'])}}
+		<label for="baseUnitPrice">Birim Fiyat</label>
+		<input type="text" name="baseUnitPrice" id="baseUnitPrice" placeholder="... TL" class="form-control">
 	</div>
 
 	<div class="form-group">
-		{{Form::label('saleUnitPrice', 'Birim Satış Fiyat')}}
-		{{Form::text('saleUnitPrice', '', ['class' => 'form-control', 'placeholder' => '... TL'])}}
+		<label for="saleUnitPrice">Birim Satış Fiyat</label>
+		<input type="text" name="saleUnitPrice" id="saleUnitPrice" placeholder="... TL" class="form-control">
 	</div>
 
 	<div class="form-group">
-		{{Form::label('quantityInStock', 'Stok Durumu')}}
-		{{Form::number('quantityInStock', '', ['class' => 'form-control'])}}
+		<label for="quantityInStock">Stok Durumu</label>
+		<input type="text" name="quantityInStock" id="quantityInStock" class="form-control">
 	</div>	
 
 	<div class="form-group">
-		{{Form::label('featuredImage', 'Ürün Resmi:')}}
-		{!! Form::file('featuredImage', ['class' => 'form-control']) !!}
+		<label for="featuredImage">Ürün Resmi:</label>
+		<input type="file" name="featuredImage" id="featuredImage" class="form-control">
 	</div>
 	
-	{{Form::submit('Ürün Ekle', ['class' => 'btn btn-primary'])}}
-{{ Form::close() }}
+	<input type="submit" value="Ürün Ekle" class="btn btn-primary">
+</form>
 @endsection

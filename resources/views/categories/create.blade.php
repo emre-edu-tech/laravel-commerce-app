@@ -2,17 +2,19 @@
 
 @section('content')
 <h2>Ürün Kategorisi Ekleyin</h2>
-{{ Form::open(['action' => 'CategoriesController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+
+<form action="{{ route('categories.store') }}" method="post" enctype="multipart/form-data">
+	@csrf
 	<div class="form-group">
-		{{Form::label('name', 'Kategori Adı')}}
-		{{Form::text('name', '', ['class' => 'form-control'])}}
+		<label for="name">Kategori Adı</label>
+		<input type="text" name="name" id="name" class="form-control">
 	</div>
 	<div class="form-group">
-		{{Form::label('description', 'Kategori Açıklama')}}
-		{{Form::textArea('description', '', ['class' => 'form-control'])}}
+		<label for="description">Kategori Açıklama</label>
+		<textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
 	</div>
 	<div class="form-group">
-		{{Form::label('parentCategory', 'Ana Kategori Seç')}}
+		<label for="parentCategory">Ana Kategori Seç</label>
 		<select name="parentCategory" id="parentCategory">
 			<option value="0">Ana Kategori Yok</option>
 			@if(count($parentCategoryOptions) > 0)
@@ -23,9 +25,9 @@
 		</select>
 	</div>
 	<div class="form-group">
-		{{Form::label('featuredLogo', 'Tanıtıcı Resim (logo)')}}
-		{!! Form::file('featuredLogo', ['class' => 'form-control']) !!}
+		<label for="featuredLogo">Tanıtıcı Resim (logo)</label>
+		<input type="file" name="featuredLogo" id="featuredLogo" class="form-control">
 	</div>
-	{{Form::submit('Kategori Ekle', ['class' => 'btn btn-primary'])}}
-{{ Form::close() }}
+	<input type="submit" value="Kategori Ekle" class="btn btn-primary">
+</form>
 @endsection

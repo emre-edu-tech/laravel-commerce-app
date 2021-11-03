@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -71,6 +71,7 @@
         </ul>
 
         <form class="form-inline my-2 my-lg-0">
+          @csrf
           <input class="form-control mr-sm-2" type="search" placeholder="Arama Yap" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Arama</button>
         </form>
