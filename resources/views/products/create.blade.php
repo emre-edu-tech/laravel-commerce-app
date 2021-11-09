@@ -8,7 +8,7 @@
 		<label for="category">Kategori:</label>
 		<select name="category" id="category">
 			<option>Marka/Kategori seçiniz</option>
-			@if(count($categories) >0 )
+			@if(count($categories) > 0)
 				@foreach($categories as $category)
 					<option value="{{$category->id}}">{{$category->parent->name}} - {{$category->name}}</option>
 				@endforeach

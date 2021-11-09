@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;    // added while upgrading Laravel 7 to 8
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        Paginator::useBootstrap();
 
         // Everytime a view is composed, a menu is constructed and hijacked the newly created view
         view()->composer('*', function($view){
